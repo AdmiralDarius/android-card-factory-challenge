@@ -1,8 +1,12 @@
 package darius.cardfactory;
 
+import android.content.Context;
 import android.media.Image;
+import android.os.StrictMode;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,7 +19,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         initialize_cards();
+        show_another_card(null);
     }
 
     private void initialize_cards() {
@@ -38,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
         TextView titleText=(TextView) findViewById(R.id.title);
         TextView descriptionText =(TextView) findViewById(R.id.description);
         ImageView cardImage =(ImageView) findViewById(R.id.card_image);
-        Card.choose_card(cards).show_card(titleText,descriptionText,cardImage);
+        Card.choose_card(cards).show_card(this,titleText,descriptionText,cardImage);
+    }
+
+    public void main_vibrate() {
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        Log.d("tag","has vibrator ?"+v.hasVibrator());
+        v.vibrate(2000);
     }
 }
