@@ -1,7 +1,11 @@
 package darius.cardfactory;
 
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,5 +32,12 @@ public class MainActivity extends AppCompatActivity {
 
         cards[4]=new Card(0,"Sports","Have you ever played one of theses sports?.","sport");
         cards[4].set_image("http://static.pushe.co/challenge/sport.jpg");
+    }
+
+    public void show_another_card(View view){ // function for "try again " button
+        TextView titleText=(TextView) findViewById(R.id.title);
+        TextView descriptionText =(TextView) findViewById(R.id.description);
+        ImageView cardImage =(ImageView) findViewById(R.id.card_image);
+        Card.choose_card(cards).show_card(titleText,descriptionText,cardImage);
     }
 }
