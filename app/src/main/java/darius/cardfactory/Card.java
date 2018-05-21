@@ -2,6 +2,7 @@ package darius.cardfactory;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -54,8 +55,34 @@ public class Card {
 
             }
         }
+        change_theme(titleText,descriptionText,this.tag);
         this.roll-=100; // push the card to the end of random stack
     }
+
+    private void change_theme(TextView titleText, TextView descriptionText,String tag) {
+        switch (tag) {
+            case "fun":
+                titleText.setHighlightColor(Color.BLUE);
+                titleText.setTextColor(Color.BLUE);
+                descriptionText.setHighlightColor(Color.MAGENTA);
+                descriptionText.setTextColor(Color.MAGENTA);
+                break;
+            case "sport":
+                titleText.setTextColor(Color.RED);
+                titleText.setTextColor(Color.RED);
+                descriptionText.setTextColor(Color.GRAY);
+                descriptionText.setTextColor(Color.GRAY);
+                break;
+            default:
+                titleText.setTextColor(Color.GREEN);
+                titleText.setTextColor(Color.GREEN);
+                descriptionText.setTextColor(Color.DKGRAY);
+                descriptionText.setTextColor(Color.DKGRAY);
+                break;
+        }
+
+    }
+
     public void set_sound(String sound){
         this.sound=sound;
     }

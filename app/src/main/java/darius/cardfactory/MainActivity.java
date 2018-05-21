@@ -1,7 +1,6 @@
 package darius.cardfactory;
 
 import android.content.Context;
-import android.media.Image;
 import android.os.StrictMode;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
@@ -10,14 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,8 +21,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -58,27 +47,27 @@ public class MainActivity extends AppCompatActivity {
             // read the response
             InputStream in = new BufferedInputStream(conn.getInputStream());
             response = convertStreamToString(in);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         try {
             JSONObject reader = new JSONObject(response);
             JSONArray cards = reader.getJSONArray("cards");
-            this.cards=new Card[cards.length()];
-            Log.d("tag",cards.length()+"");
+            this.cards = new Card[cards.length()];
+            Log.d("tag", cards.length() + "");
             for (int i = 0; i < cards.length(); i++) {
                 JSONObject card = cards.getJSONObject(i);
                 int code = card.getInt("code");
-                String title=card.getString("title");
-                String description=card.getString("description");
-                String tag=card.getString("tag");
-                this.cards[i]=new Card(code,title,description,tag);
-                if(code==0)
+                String title = card.getString("title");
+                String description = card.getString("description");
+                String tag = card.getString("tag");
+                this.cards[i] = new Card(code, title, description, tag);
+                if (code == 0)
                     this.cards[i].set_image(card.getString("image"));
-                if(code==2)
+                if (code == 2)
                     this.cards[i].set_sound(card.getString("sound"));
             }
-        }catch (Exception e){
+        } catch (JSONException ignored) {
 
         }
     }
