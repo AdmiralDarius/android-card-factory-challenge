@@ -10,10 +10,33 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    Card cards[]=new Card[5];
+    Card cards[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,19 +49,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialize_cards() {
-        //TODO read from http://static.pushe.co/challenge/json
-        cards[0]=new Card(1,"Exercise","Exercise on a regular basis.","sport");
+        String mainurl = "http://static.pushe.co/challenge/json";
+        String response="";
+        try {
+            URL url = new URL(mainurl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            // read the response
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            response = convertStreamToString(in);
+        } catch (Exception e) {
 
-        cards[1]=new Card(0,"Painting","Look at this beautiful painting","art");
-        cards[1].set_image("http://static.pushe.co/challenge/sky.jpg");
+        }
+        try {
+            JSONObject reader = new JSONObject(response);
+            JSONArray cards = reader.getJSONArray("cards");
+            this.cards=new Card[cards.length()];
+            Log.d("tag",cards.length()+"");
+            for (int i = 0; i < cards.length(); i++) {
+                JSONObject card = cards.getJSONObject(i);
+                int code = card.getInt("code");
+                String title=card.getString("title");
+                String description=card.getString("description");
+                String tag=card.getString("tag");
+                this.cards[i]=new Card(code,title,description,tag);
+                if(code==0)
+                    this.cards[i].set_image(card.getString("image"));
+                if(code==2)
+                    this.cards[i].set_sound(card.getString("sound"));
+            }
+        }catch (Exception e){
 
-        cards[2]=new Card(2,"Let's have fun","Listen to the music","fun");
-        cards[2].set_sound("http://static.pushe.co/challenge/sound.mp3");
-
-        cards[3]=new Card(1,"Hey!","Have you called your parents lately!","fun");
-
-        cards[4]=new Card(0,"Sports","Have you ever played one of theses sports?.","sport");
-        cards[4].set_image("http://static.pushe.co/challenge/sport.jpg");
+        }
     }
 
     public void show_another_card(View view){ // function for "try again " button
@@ -52,5 +94,27 @@ public class MainActivity extends AppCompatActivity {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         Log.d("tag","has vibrator ?"+v.hasVibrator());
         v.vibrate(2000);
+    }
+
+    private String convertStreamToString(InputStream is) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return sb.toString();
     }
 }
