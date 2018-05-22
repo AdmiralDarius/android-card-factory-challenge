@@ -24,9 +24,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * @author      Aliakbar Nafar DariusSafavy@gmail.com
+ */
 
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * the cards that must be shown on the screen
+     */
     Card cards[];
 
     @Override
@@ -38,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         initialize_cards();
         show_another_card(null);
     }
+
+    /**
+     * read the jsons and initialzes the cards
+      */
 
     public void initialize_cards() {
         String mainurl = "http://static.pushe.co/challenge/json";
@@ -74,12 +84,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void show_another_card(View view){ // function for "try again " button
+    /**
+     * chooses the next card to be shown and puts it's components in UI.
+     * also function for "try again " button.
+     */
+
+    public void show_another_card(View view){
         TextView titleText=(TextView) findViewById(R.id.title);
         TextView descriptionText =(TextView) findViewById(R.id.description);
         ImageView cardImage =(ImageView) findViewById(R.id.card_image);
         Card.choose_card(cards).show_card(this,titleText,descriptionText,cardImage);
     }
+
+    /**
+     * makes the phone vibrate for 2 seconds
+      */
 
     public void main_vibrate() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -87,10 +106,13 @@ public class MainActivity extends AppCompatActivity {
         v.vibrate(2000);
     }
 
+    /**
+     * reads the String from a link
+      */
+
     private String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
-
         String line;
         try {
             while ((line = reader.readLine()) != null) {
@@ -105,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
         return sb.toString();
     }
 }
