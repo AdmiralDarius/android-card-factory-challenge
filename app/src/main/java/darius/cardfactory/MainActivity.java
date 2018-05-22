@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import junit.framework.TestCase;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         show_another_card(null);
     }
 
-    private void initialize_cards() {
+    public void initialize_cards() {
         String mainurl = "http://static.pushe.co/challenge/json";
         String response="";
         try {

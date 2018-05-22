@@ -96,5 +96,7 @@ public class Card {
                 chosen_card=cards[i];
         return chosen_card;
     }
-
+    public void setRoll(int roll){
+        this.roll=roll;
+    }
 }
